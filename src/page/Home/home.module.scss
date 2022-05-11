@@ -1,0 +1,21 @@
+
+
+.home{
+    width: 100%;
+    min-height: 100vh;
+}
+.items{
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    border:1px solid darkblue;
+    .item{
+        width: 20%;
+        margin-right: 20px;
+        border:1px solid blue;
+        padding: 5px;
+        margin-bottom: 20px;
+    }
+}
