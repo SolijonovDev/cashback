@@ -1,0 +1,22 @@
+.header {
+    width: 100%;
+    background-color: darkcyan;
+    &_inner {
+        width: 100%;
+        max-width: 1300px;
+        margin: 0 auto;
+        padding: 15px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        a{
+            text-decoration: none;
+            font-size: 32px;
+            font-weight: 600;
+            color:#fff;
+            &:hover,&:active{
+                color:#fff;
+            }
+        }
+    }
+}

@@ -15,7 +15,7 @@ type intialStateType = {
 const initialState: intialStateType = {
   isAuth: false,
   isNumberSuccessSend: false,
-  phone: "",
+  phone: "998909069262",
   code: "",
   isNumberLoading: false,
   isCodeLoading: false,
@@ -27,17 +27,23 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setAuth(state, action: PayloadAction<boolean>) {
+    setAuth(state:any, action: PayloadAction<boolean>) {
       state.isAuth = action.payload;
     },
-    setPhone(state, action: PayloadAction<string | undefined | null>) {
+    setPhone(state:any, action: PayloadAction<string | undefined | null>) {
       state.phone = action.payload;
     },
-    setCode(state, action: PayloadAction<string | number>) {
+    setCode(state:any, action: PayloadAction<string | number>) {
       state.code = action.payload;
     },
-    setSuccessNumberSend(state, action: PayloadAction<boolean>) {
+    setCodeLoading(state:any, action: PayloadAction<boolean>) {
+      state.isCodeLoading = action.payload;
+    },
+    setSuccessNumberSend(state:any, action: PayloadAction<boolean>) {
       state.isNumberSuccessSend = action.payload;
+    },
+    setCodeErrorMessage(state:any, action: PayloadAction<string>) {
+      state.codeErrorMessage = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -93,5 +99,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { setAuth, setPhone, setCode ,setSuccessNumberSend} = authSlice.actions;
+export const { setAuth, setPhone, setCode ,setSuccessNumberSend,setCodeErrorMessage,setCodeLoading} = authSlice.actions;
 export default authSlice.reducer;

@@ -1,8 +1,9 @@
 import React from 'react'
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { getCompanies } from '../../http';
 import s from './home.module.scss'
+import Api from '../../http/companys.js'
+import { Item } from './Item';
 
 interface item{
     id:number;
@@ -14,11 +15,12 @@ export const Home=()=> {
     const [data,setData]=useState<item[]>([])
 
     async function getCom(){
-        const res=await getCompanies()
-        setData(res?.items)  
+        const res=await Api.getCompanies()
+        const r=await Api.getOneCompany()
+        setData(res.data.items)  
     }
     useEffect(()=>{
-    //    getCom()
+       getCom()
     },[])
     console.log("home data",data);
     
@@ -26,14 +28,7 @@ export const Home=()=> {
     <div className={s.home}>
           <div className={s.items}>
           {
-              data.length && data.map(v=>(
-                   <div className={s.item}>
-                       <h1>{v.id}</h1>
-                       <p>{v.name}</p>
-                       <p>{v.short_description}</p>
-                       <p>{v.created_at}</p>
-                   </div>
-               ))
+              data.length && data.map(v=><Item item={v} key={v.id+v.name}/>)
            }
           </div>
         </div>

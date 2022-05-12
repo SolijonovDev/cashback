@@ -1,50 +1,37 @@
 import axios from "axios";
 
-const url="https://api.uracashback.uz/"
+const url = "https://api.uracashback.uz/";
 
-let $api= axios.create({
-    headers: {
-        "Content-Type":"application/json"
-    },
-    baseURL:url
-  })
+export let $host = axios.create({
+  headers: {
+    "Content-Type": "application/json",
+  },
+  baseURL: url,
+});
 
+export let $api = axios.create({
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  },
+  baseURL: url,
+});
 
-  let instanse=axios.create({
-      headers:{
-        "Authorization": `Bearer ${localStorage.getItem("token")}`
-      },
-      baseURL:url
-  })
-  
-
-
-export  async function  sendVerification(phone){
-    const res=await $api.post("security/send-verification",{
-        "phoneNumber":`${phone}`
-    })
+class AuthApi {
+  async sendVerification(phone) {
+    const res = await $host.post("security/send-verification", {
+      phoneNumber: `${phone}`,
+    });
     return res;
-}
-
-
-export  async function  verifyLogin(phone,code){
-    const res=await $api.post("security/verify-login",{
-        "phoneNumber":`${phone}`,
-        code
-    }
-    )
-    localStorage.setItem('token',res.data.token)
-
+  }
+  async verifyLogin(phone, code) {
+    const res = await $host.post("security/verify-login", {
+      phoneNumber: `${phone}`,
+      code,
+    });
+    localStorage.setItem("token", res.data.token);
     return res;
+  }
 }
 
-
-export async function getCompanies(){
-    const res=await instanse.get("companies")
-    console.log(res);
-    if(res.status===200){
-        return res.data;
-    }
-    alert("Error")
-}
-
+export default new AuthApi()
