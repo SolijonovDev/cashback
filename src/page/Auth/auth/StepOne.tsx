@@ -9,7 +9,8 @@ import { sendNumber } from "../../../store/actions/auth-actions";
 
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import { Button, CircularProgress, Typography } from "@material-ui/core";
+
+import { Button, Typography } from "@material-ui/core";
 
 export const StepOne: FC = () => {
   const dispatch = useAppDispatch();
@@ -20,6 +21,7 @@ export const StepOne: FC = () => {
   React.useEffect(()=>{
     dispatch(setPhone(""))
    },[])
+   
   if (isNumberSuccessSend) {
     history.push(authRouterNames.registrationStepTwo);
     dispatch(setSuccessNumberSend(false));
@@ -30,8 +32,7 @@ export const StepOne: FC = () => {
   };
 
   const handleSend = (e: any) => {
-    // dispatch(sendNumber(phone));
-    history.push(authRouterNames.registrationStepTwo);
+    dispatch(sendNumber(phone));
   };
 
   return (
@@ -53,7 +54,7 @@ export const StepOne: FC = () => {
           onClick={handleSend}
         >
           {isNumberLoading ? (
-            <CircularProgress color="secondary" />
+            <Typography>Loading...</Typography>
           ) : (
             <Typography>Kirish</Typography>
           )}

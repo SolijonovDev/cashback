@@ -16,8 +16,8 @@ export const StepTwo: FC = () => {
   const history = useHistory();
   const dispatch = useAppDispatch();
 
-  const [minutes, setMinutes] = React.useState(0);
-  const [seconds, setSeconds] = React.useState(10);
+  const [minutes, setMinutes] = React.useState(2);
+  const [seconds, setSeconds] = React.useState(0);
   const { phone, code, isCodeLoading, codeErrorMessage } = useAppSelector(
     (state) => state.auth
   );
@@ -75,16 +75,13 @@ export const StepTwo: FC = () => {
           +{phone} nomerga tasdiqlash kodi yuborildi
         </Typography>
 
-        {codeErrorMessage || isCodeLoading || (
+        {codeErrorMessage? <Typography color="secondary" gutterBottom>{codeErrorMessage}</Typography> : isCodeLoading || (
           <Typography variant="h4" gutterBottom>
             {" "}
             {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
           </Typography>
         )}
 
-        <div className={s.reg_error_mes}>
-          <Typography>{Boolean(codeErrorMessage) && "Error"}</Typography>
-        </div>
         {!(minutes === 0 && seconds === 0) ? (
           <TextField
             placeholder="code"

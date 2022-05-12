@@ -1,36 +1,44 @@
-import React from 'react'
-import { useState } from 'react';
-import { useEffect } from 'react';
-import s from './home.module.scss'
-import Api from '../../http/companys.js'
-import { Item } from './Item';
+import React from "react";
+import { useEffect } from "react";
+import s from "./home.module.scss";
+import { CustomizedTables } from "./Table";
+import { useAppDispatch, useAppSelector } from "./../../hooks/redux";
+import { getCompanies } from "./../../store/actions/company-actions";
 
-interface item{
-    id:number;
-    name:string;
-    short_description:string;
-    created_at:string;
+interface item {
+  id: number;
+  name: string;
+  short_description: string;
+  created_at: string;
 }
-export const Home=()=> {
-    const [data,setData]=useState<item[]>([])
+export const Home = () => {
+  const { items, loading, error, errorMessage } = useAppSelector(
+    (state) => state.company
+  );
+  const dispatch = useAppDispatch();
 
-    async function getCom(){
-        const res=await Api.getCompanies()
-        const r=await Api.getOneCompany()
-        setData(res.data.items)  
+  useEffect(() => {
+    if(!items.length){
+      dispatch(getCompanies());
     }
-    useEffect(()=>{
-       getCom()
-    },[])
-    console.log("home data",data);
-    
+  }, []);
+
   return (
     <div className={s.home}>
+      <div className="container">
+        {loading ? (
+          <div>Yuklanmoqda... </div>
+        ) : (
           <div className={s.items}>
-          {
-              data.length && data.map(v=><Item item={v} key={v.id+v.name}/>)
+           {
+             items.length ?
+              <CustomizedTables items={items} />
+             :
+             <div>Kompaniyalar topilmadi</div>
            }
           </div>
-        </div>
-  )
-}
+        )}
+      </div>
+    </div>
+  );
+};

@@ -1,35 +1,38 @@
+import { Button } from "@material-ui/core";
+import { FC, useEffect, useState } from "react";
+import { useParams, useHistory } from "react-router-dom";
+import  {getOneCompany}  from "../../store/actions/company-actions";
+import { useAppSelector, useAppDispatch } from "./../../hooks/redux";
+import s from './com.module.scss'
 
-import { Button } from '@material-ui/core';
-import { FC, useEffect, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
-import Api from '../../http/companys.js'
 
+export const Company: FC = () => {
+  const params: { id: string | undefined } = useParams();
+  const dispatch=useAppDispatch()
+  const { isLoadingProducts,products } = useAppSelector((state) => state.company);
+  const history = useHistory();
 
-interface dataType{
-    params:{
-        company:string | undefined;
-    };
-    total_count:string | number | null | undefined;
-}
+  useEffect(() => {
+    dispatch(getOneCompany(params.id));
+  }, []);
 
-export const Company:FC=()=>{
-    const params:{id:string| undefined}=useParams()
-    const [data,setData]=useState<dataType>()
-    const history=useHistory()
-    async function fun(){
-        const res=await Api.getOneCompany(params.id)
-        if(res.status===200){
-            setData(res.data)
-        }        
-    }
-    useEffect(()=>{
-       fun()
-    },[])
-    return (
-        <div>
-           <h1>Company</h1>
-           <h2>{data?.params?.company}</h2>
-           <Button onClick={()=>history.push("/home")}>Back</Button>
+  return (
+   <div className={s.com}>
+        <div className="container">
+      {isLoadingProducts ? (
+        <div className={s.loading}>
+          <h1>Yuklanmoqda....</h1>
         </div>
-    )
-}
+      ) : (
+        <div>
+          <h1>Num items per page : {products.num_items_per_page}</h1>
+           <h2>Page range: {products.page_range}</h2>
+           <h2>Company Id: {products.params.company}</h2>
+          <h2>hadfsl;</h2>
+        </div>
+      )}
+      <Button onClick={() => history.push("/home")}>Back</Button>
+    </div>
+   </div>
+  );
+};

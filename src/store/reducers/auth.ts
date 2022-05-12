@@ -13,9 +13,9 @@ type intialStateType = {
 };
 
 const initialState: intialStateType = {
-  isAuth: false,
+  isAuth: true,
   isNumberSuccessSend: false,
-  phone: "998909069262",
+  phone: "",
   code: "",
   isNumberLoading: false,
   isCodeLoading: false,
@@ -27,29 +27,33 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setAuth(state:any, action: PayloadAction<boolean>) {
+    setAuth(state:intialStateType, action: PayloadAction<boolean>) {
       state.isAuth = action.payload;
     },
-    setPhone(state:any, action: PayloadAction<string | undefined | null>) {
+    setPhone(state:intialStateType, action: PayloadAction<string | undefined | null>) {
       state.phone = action.payload;
     },
-    setCode(state:any, action: PayloadAction<string | number>) {
+    setCode(state:intialStateType, action: PayloadAction<string | number>) {
       state.code = action.payload;
     },
-    setCodeLoading(state:any, action: PayloadAction<boolean>) {
+    setCodeLoading(state:intialStateType, action: PayloadAction<boolean>) {
       state.isCodeLoading = action.payload;
     },
-    setSuccessNumberSend(state:any, action: PayloadAction<boolean>) {
+    setSuccessNumberSend(state:intialStateType, action: PayloadAction<boolean>) {
       state.isNumberSuccessSend = action.payload;
     },
-    setCodeErrorMessage(state:any, action: PayloadAction<string>) {
+    setCodeErrorMessage(state:intialStateType, action: PayloadAction<string>) {
       state.codeErrorMessage = action.payload;
+    },
+    logout(state:intialStateType) {
+      localStorage.setItem("token","")
+      state.isAuth=false;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(
       sendNumber.fulfilled,
-      (state, action: PayloadAction<any>) => {
+      (state:intialStateType, action: PayloadAction<any>) => {
         const data = action.payload;
         if (data.status === 204) {
           state.isNumberSuccessSend = true;
@@ -60,13 +64,13 @@ const authSlice = createSlice({
       }
     );
 
-    builder.addCase(sendNumber.pending, (state, action: PayloadAction<any>) => {
+    builder.addCase(sendNumber.pending, (state:intialStateType, action: PayloadAction<any>) => {
       state.isNumberLoading = true;
     });
 
     builder.addCase(
       sendNumber.rejected,
-      (state, action: PayloadAction<any>) => {
+      (state:intialStateType, action: PayloadAction<any>) => {
         alert("Error");
         state.isNumberLoading=false;
         state.numberErrorMessage=action.payload;
@@ -75,7 +79,7 @@ const authSlice = createSlice({
 
     builder.addCase(
       checkLogin.fulfilled,
-      (state, action: PayloadAction<any>) => {
+      (state:intialStateType, action: PayloadAction<any>) => {
           state.isCodeLoading=false;
         const data = action.payload;
         if (data.status === 200) {
@@ -85,13 +89,13 @@ const authSlice = createSlice({
       }
     );
 
-    builder.addCase(checkLogin.pending, (state, action: PayloadAction<any>) => {
+    builder.addCase(checkLogin.pending, (state:intialStateType, action: PayloadAction<any>) => {
       state.isCodeLoading=true;      
     });
 
     builder.addCase(
       checkLogin.rejected,
-      (state, action: PayloadAction<any>) => {
+      (state:intialStateType, action: PayloadAction<any>) => {
           state.isCodeLoading=false;
          state.codeErrorMessage=action.payload;
       }
@@ -99,5 +103,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { setAuth, setPhone, setCode ,setSuccessNumberSend,setCodeErrorMessage,setCodeLoading} = authSlice.actions;
+export const {logout, setAuth, setPhone, setCode ,setSuccessNumberSend,setCodeErrorMessage,setCodeLoading} = authSlice.actions;
 export default authSlice.reducer;
