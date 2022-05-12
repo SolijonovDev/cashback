@@ -13,74 +13,83 @@ type intialStateType = {
 };
 
 const initialState: intialStateType = {
-  isAuth: true,
+  isAuth: false,
   isNumberSuccessSend: false,
   phone: "",
   code: "",
   isNumberLoading: false,
   isCodeLoading: false,
   numberErrorMessage: "",
-  codeErrorMessage: ""
+  codeErrorMessage: "",
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setAuth(state:intialStateType, action: PayloadAction<boolean>) {
+    setAuth(state: intialStateType, action: PayloadAction<boolean>) {
       state.isAuth = action.payload;
     },
-    setPhone(state:intialStateType, action: PayloadAction<string | undefined | null>) {
+    setPhone(
+      state: intialStateType,
+      action: PayloadAction<string | undefined | null>
+    ) {
       state.phone = action.payload;
     },
-    setCode(state:intialStateType, action: PayloadAction<string | number>) {
+    setCode(state: intialStateType, action: PayloadAction<string | number>) {
       state.code = action.payload;
     },
-    setCodeLoading(state:intialStateType, action: PayloadAction<boolean>) {
+    setCodeLoading(state: intialStateType, action: PayloadAction<boolean>) {
       state.isCodeLoading = action.payload;
     },
-    setSuccessNumberSend(state:intialStateType, action: PayloadAction<boolean>) {
+    setSuccessNumberSend(
+      state: intialStateType,
+      action: PayloadAction<boolean>
+    ) {
       state.isNumberSuccessSend = action.payload;
     },
-    setCodeErrorMessage(state:intialStateType, action: PayloadAction<string>) {
+    setCodeErrorMessage(state: intialStateType, action: PayloadAction<string>) {
       state.codeErrorMessage = action.payload;
     },
-    logout(state:intialStateType) {
-      localStorage.setItem("token","")
-      state.isAuth=false;
+    logout(state: intialStateType) {
+      localStorage.setItem("token", "");
+      state.isAuth = false;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(
       sendNumber.fulfilled,
-      (state:intialStateType, action: PayloadAction<any>) => {
+      (state: intialStateType, action: PayloadAction<any>) => {
         const data = action.payload;
         if (data.status === 204) {
           state.isNumberSuccessSend = true;
         } else {
           state.isNumberSuccessSend = false;
         }
-        state.isNumberLoading=false;
+        state.isNumberLoading = false;
       }
     );
 
-    builder.addCase(sendNumber.pending, (state:intialStateType, action: PayloadAction<any>) => {
-      state.isNumberLoading = true;
-    });
+    builder.addCase(
+      sendNumber.pending,
+      (state: intialStateType, action: PayloadAction<any>) => {
+        state.isNumberLoading = true;
+      }
+    );
 
     builder.addCase(
       sendNumber.rejected,
-      (state:intialStateType, action: PayloadAction<any>) => {
+      (state: intialStateType, action: PayloadAction<any>) => {
         alert("Error");
-        state.isNumberLoading=false;
-        state.numberErrorMessage=action.payload;
+        state.isNumberLoading = false;
+        state.numberErrorMessage = action.payload;
       }
     );
 
     builder.addCase(
       checkLogin.fulfilled,
-      (state:intialStateType, action: PayloadAction<any>) => {
-          state.isCodeLoading=false;
+      (state: intialStateType, action: PayloadAction<any>) => {
+        state.isCodeLoading = false;
         const data = action.payload;
         if (data.status === 200) {
           localStorage.setItem("token", data.data.token);
@@ -89,19 +98,30 @@ const authSlice = createSlice({
       }
     );
 
-    builder.addCase(checkLogin.pending, (state:intialStateType, action: PayloadAction<any>) => {
-      state.isCodeLoading=true;      
-    });
+    builder.addCase(
+      checkLogin.pending,
+      (state: intialStateType, action: PayloadAction<any>) => {
+        state.isCodeLoading = true;
+      }
+    );
 
     builder.addCase(
       checkLogin.rejected,
-      (state:intialStateType, action: PayloadAction<any>) => {
-          state.isCodeLoading=false;
-         state.codeErrorMessage=action.payload;
+      (state: intialStateType, action: PayloadAction<any>) => {
+        state.isCodeLoading = false;
+        state.codeErrorMessage = action.payload;
       }
     );
   },
 });
 
-export const {logout, setAuth, setPhone, setCode ,setSuccessNumberSend,setCodeErrorMessage,setCodeLoading} = authSlice.actions;
+export const {
+  logout,
+  setAuth,
+  setPhone,
+  setCode,
+  setSuccessNumberSend,
+  setCodeErrorMessage,
+  setCodeLoading,
+} = authSlice.actions;
 export default authSlice.reducer;

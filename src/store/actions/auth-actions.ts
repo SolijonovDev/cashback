@@ -4,7 +4,6 @@ import AuthApi from "../../http";
 export const sendNumber = createAsyncThunk(
   "sendNumber",
   async (phone: string | null | undefined, thunkAPI) => {
-    debugger
     try {
       let res = await AuthApi.sendVerification(phone);
       return res;
@@ -20,7 +19,6 @@ export const checkLogin = createAsyncThunk(
     useData: { code: string | number; phone: string | null | undefined },
     thunkAPI
   ) => {
-    debugger
     try {
       const { code, phone } = useData;
       let res = await AuthApi.verifyLogin(phone, code);
